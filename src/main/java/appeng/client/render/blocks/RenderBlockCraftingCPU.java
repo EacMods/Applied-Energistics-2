@@ -1,9 +1,28 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.client.render.blocks;
 
 import java.util.EnumSet;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -22,8 +41,8 @@ import appeng.tile.crafting.TileCraftingTile;
 public class RenderBlockCraftingCPU extends BaseBlockRender
 {
 
-	protected RenderBlockCraftingCPU(boolean useTesr, int range) {
-		super( useTesr, range );
+	protected RenderBlockCraftingCPU(boolean useTESR, int range) {
+		super( useTESR, range );
 	}
 
 	public RenderBlockCraftingCPU() {
@@ -303,6 +322,16 @@ public class RenderBlockCraftingCPU extends BaseBlockRender
 
 	private boolean isConnected(IBlockAccess w, int x, int y, int z, ForgeDirection side)
 	{
-		return w.getTileEntity( x + side.offsetX, y + side.offsetY, z + side.offsetZ ) instanceof TileCraftingTile;
+		final int tileYPos = y + side.offsetY;
+		if ( 0 <= tileYPos && tileYPos <= 255)
+		{
+			final TileEntity tile = w.getTileEntity( x + side.offsetX, tileYPos, z + side.offsetZ );
+
+			return tile instanceof TileCraftingTile;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

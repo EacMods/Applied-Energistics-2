@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.parts.p2p;
 
 import java.util.LinkedList;
@@ -145,7 +163,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 		return wasReq ? TickRateModulation.FASTER : TickRateModulation.SLOWER;
 	}
 
-	IInventory getDest()
+	IInventory getDestination()
 	{
 		requested = true;
 
@@ -186,7 +204,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 		{
 			cachedInv = null;
 			int olderSize = oldSize;
-			oldSize = getDest().getSizeInventory();
+			oldSize = getDestination().getSizeInventory();
 			if ( olderSize != oldSize )
 			{
 				getHost().notifyNeighbors();
@@ -201,7 +219,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 		{
 			cachedInv = null;
 			int olderSize = oldSize;
-			oldSize = getDest().getSizeInventory();
+			oldSize = getDestination().getSizeInventory();
 			if ( olderSize != oldSize )
 			{
 				getHost().notifyNeighbors();
@@ -216,7 +234,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 		{
 			cachedInv = null;
 			int olderSize = oldSize;
-			oldSize = getDest().getSizeInventory();
+			oldSize = getDestination().getSizeInventory();
 			if ( olderSize != oldSize )
 			{
 				getHost().notifyNeighbors();
@@ -231,7 +249,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 		{
 			cachedInv = null;
 			int olderSize = oldSize;
-			oldSize = getDest().getSizeInventory();
+			oldSize = getDestination().getSizeInventory();
 			if ( olderSize != oldSize )
 			{
 				getHost().notifyNeighbors();
@@ -255,19 +273,19 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 	@Override
 	public int getSizeInventory()
 	{
-		return getDest().getSizeInventory();
+		return getDestination().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i)
 	{
-		return getDest().getStackInSlot( i );
+		return getDestination().getStackInSlot( i );
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j)
 	{
-		return getDest().decrStackSize( i, j );
+		return getDestination().decrStackSize( i, j );
 	}
 
 	@Override
@@ -279,7 +297,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack)
 	{
-		getDest().setInventorySlotContents( i, itemstack );
+		getDestination().setInventorySlotContents( i, itemstack );
 	}
 
 	@Override
@@ -297,7 +315,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 	@Override
 	public int getInventoryStackLimit()
 	{
-		return getDest().getInventoryStackLimit();
+		return getDestination().getInventoryStackLimit();
 	}
 
 	@Override
@@ -313,7 +331,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 	@Override
 	public boolean isItemValidForSlot(int i, net.minecraft.item.ItemStack itemstack)
 	{
-		return getDest().isItemValidForSlot( i, itemstack );
+		return getDestination().isItemValidForSlot( i, itemstack );
 	}
 
 	@Override
@@ -333,7 +351,7 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems> implements IPipeCo
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j)
 	{
-		return getDest().isItemValidForSlot( i, itemstack );
+		return getDestination().isItemValidForSlot( i, itemstack );
 	}
 
 	@Override

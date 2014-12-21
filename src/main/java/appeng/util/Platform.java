@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.util;
+
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,7 +32,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import appeng.util.item.OreReference;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -58,6 +76,16 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import buildcraft.api.tools.IToolWrench;
+
 import appeng.api.AEApi;
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
@@ -107,14 +135,8 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.util.item.AEItemStack;
 import appeng.util.item.AESharedNBT;
 import appeng.util.item.OreHelper;
+import appeng.util.item.OreReference;
 import appeng.util.prioitylist.IPartitionList;
-import buildcraft.api.tools.IToolWrench;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class Platform
 {
@@ -176,7 +198,7 @@ public class Platform
 		}
 
 		DecimalFormat df = new DecimalFormat( "#.##" );
-		return df.format( p ) + " " + Lvl + unitName + (isRate ? "/t" : "");
+		return df.format( p ) + ' ' + Lvl + unitName + (isRate ? "/t" : "");
 	}
 
 	public static ForgeDirection crossProduct(ForgeDirection forward, ForgeDirection up)
@@ -831,7 +853,7 @@ public class Platform
 		try
 		{
 			String name = itemStack.getDisplayName();
-			if ( name == null || name.equals( "" ) )
+			if ( name == null || name.isEmpty() )
 				name = itemStack.getItem().getUnlocalizedName( itemStack );
 			return name == null ? "** Null" : name;
 		}

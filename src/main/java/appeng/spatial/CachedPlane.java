@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.spatial;
 
 import java.util.HashMap;
@@ -159,14 +177,14 @@ public class CachedPlane
 		for (int cx = 0; cx < cx_size; cx++)
 			for (int cz = 0; cz < cz_size; cz++)
 			{
-				LinkedList<Entry<ChunkPosition, TileEntity>> rwarTiles = new LinkedList<Entry<ChunkPosition, TileEntity>>();
+				LinkedList<Entry<ChunkPosition, TileEntity>> rawTiles = new LinkedList<Entry<ChunkPosition, TileEntity>>();
 				LinkedList<ChunkPosition> deadTiles = new LinkedList<ChunkPosition>();
 
 				Chunk c = w.getChunkFromChunkCoords( minCX + cx, minCZ + cz );
 				myChunks[cx][cz] = c;
 
-				rwarTiles.addAll( ((HashMap<ChunkPosition, TileEntity>) c.chunkTileEntityMap).entrySet() );
-				for (Entry<ChunkPosition, TileEntity> tx : rwarTiles)
+				rawTiles.addAll( ( ( HashMap<ChunkPosition, TileEntity> ) c.chunkTileEntityMap ).entrySet() );
+				for (Entry<ChunkPosition, TileEntity> tx : rawTiles)
 				{
 					ChunkPosition cp = tx.getKey();
 					TileEntity te = tx.getValue();
@@ -324,13 +342,13 @@ public class CachedPlane
 		world.scheduleBlockUpdate( x + x_offset, y + y_offset, z + z_offset, entry.func_151351_a(), (int) entry.scheduledTime );
 	}
 
-	private void addTile(int x, int y, int z, TileEntity te, CachedPlane alternateDest, IMovableRegistry mr)
+	private void addTile(int x, int y, int z, TileEntity te, CachedPlane alternateDestination, IMovableRegistry mr)
 	{
 		try
 		{
 			Column c = myColumns[x][z];
 
-			if ( c.doNotSkip( y + y_offset ) || alternateDest == null )
+			if ( c.doNotSkip( y + y_offset ) || alternateDestination == null )
 			{
 				IMovableHandler handler = getHandler( te );
 
@@ -362,7 +380,7 @@ public class CachedPlane
 			}
 			else
 			{
-				alternateDest.addTile( x, y, z, te, null, mr );
+				alternateDestination.addTile( x, y, z, te, null, mr );
 			}
 		}
 		catch (Throwable e)

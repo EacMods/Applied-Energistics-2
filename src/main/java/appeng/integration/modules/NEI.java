@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.integration.modules;
+
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +30,11 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import codechicken.nei.api.IStackPositioner;
+import codechicken.nei.guihook.GuiContainerManager;
+import codechicken.nei.guihook.IContainerTooltipHandler;
+
 import appeng.client.gui.AEBaseMEGui;
 import appeng.client.gui.implementations.GuiCraftingTerm;
 import appeng.client.gui.implementations.GuiPatternTerm;
@@ -26,9 +50,6 @@ import appeng.integration.modules.NEIHelpers.NEIGrinderRecipeHandler;
 import appeng.integration.modules.NEIHelpers.NEIInscriberRecipeHandler;
 import appeng.integration.modules.NEIHelpers.NEIWorldCraftingHandler;
 import appeng.integration.modules.NEIHelpers.TerminalCraftingSlotFinder;
-import codechicken.nei.api.IStackPositioner;
-import codechicken.nei.guihook.GuiContainerManager;
-import codechicken.nei.guihook.IContainerTooltipHandler;
 
 public class NEI extends BaseModule implements INEI, IContainerTooltipHandler
 {
@@ -57,8 +78,8 @@ public class NEI extends BaseModule implements INEI, IContainerTooltipHandler
 	@Override
 	public void Init() throws Throwable
 	{
-		registerRecipeHandler = API.getDeclaredMethod( "registerRecipeHandler", new Class[] { codechicken.nei.recipe.ICraftingHandler.class } );
-		registerUsageHandler = API.getDeclaredMethod( "registerUsageHandler", new Class[] { codechicken.nei.recipe.IUsageHandler.class } );
+		registerRecipeHandler = API.getDeclaredMethod( "registerRecipeHandler", codechicken.nei.recipe.ICraftingHandler.class );
+		registerUsageHandler = API.getDeclaredMethod( "registerUsageHandler", codechicken.nei.recipe.IUsageHandler.class );
 
 		registerRecipeHandler( new NEIAEShapedRecipeHandler() );
 		registerRecipeHandler( new NEIAEShapelessRecipeHandler() );
@@ -73,21 +94,21 @@ public class NEI extends BaseModule implements INEI, IContainerTooltipHandler
 		GuiContainerManager.addTooltipHandler( this );
 
 		// crafting terminal...
-		Method registerGuiOverlay = API.getDeclaredMethod( "registerGuiOverlay", new Class[] { Class.class, String.class, IStackPositioner.class } );
+		Method registerGuiOverlay = API.getDeclaredMethod( "registerGuiOverlay", Class.class, String.class, IStackPositioner.class );
 		Class IOverlayHandler = Class.forName( "codechicken.nei.api.IOverlayHandler" );
 		Class DefaultOverlayHandler = NEICraftingHandler.class;
 
-		Method registerGuiOverlayHandler = API.getDeclaredMethod( "registerGuiOverlayHandler", new Class[] { Class.class, IOverlayHandler, String.class } );
+		Method registerGuiOverlayHandler = API.getDeclaredMethod( "registerGuiOverlayHandler", Class.class, IOverlayHandler, String.class );
 		registerGuiOverlay.invoke( API, GuiCraftingTerm.class, "crafting", new TerminalCraftingSlotFinder() );
 		registerGuiOverlay.invoke( API, GuiPatternTerm.class, "crafting", new TerminalCraftingSlotFinder() );
 
-		Constructor DefaultOverlayHandlerConstructor = DefaultOverlayHandler.getConstructor( new Class[] { int.class, int.class } );
+		Constructor DefaultOverlayHandlerConstructor = DefaultOverlayHandler.getConstructor( int.class, int.class );
 		registerGuiOverlayHandler.invoke( API, GuiCraftingTerm.class, DefaultOverlayHandlerConstructor.newInstance( 6, 75 ), "crafting" );
 		registerGuiOverlayHandler.invoke( API, GuiPatternTerm.class, DefaultOverlayHandlerConstructor.newInstance( 6, 75 ), "crafting" );
 	}
 
 	@Override
-	public void PostInit() throws Throwable
+	public void PostInit()
 	{
 
 	}
@@ -109,7 +130,7 @@ public class NEI extends BaseModule implements INEI, IContainerTooltipHandler
 		int y = s.yDisplayPosition;
 
 		GuiContainerManager.drawItems.renderItemAndEffectIntoGUI( fontRenderer, mc.getTextureManager(), stack, x, y );
-		GuiContainerManager.drawItems.renderItemOverlayIntoGUI( fontRenderer, mc.getTextureManager(), stack, x, y, "" + stack.stackSize );
+		GuiContainerManager.drawItems.renderItemOverlayIntoGUI( fontRenderer, mc.getTextureManager(), stack, x, y, String.valueOf( stack.stackSize ) );
 	}
 
 	@Override

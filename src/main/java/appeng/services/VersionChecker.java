@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.services;
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,31 +26,30 @@ import java.net.URLConnection;
 import java.util.Date;
 
 import net.minecraft.nbt.NBTTagCompound;
-import appeng.core.AEConfig;
-import appeng.core.AELog;
-import appeng.core.AppEng;
+
+import cpw.mods.fml.common.event.FMLInterModComms;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import cpw.mods.fml.common.event.FMLInterModComms;
+import appeng.core.AEConfig;
+import appeng.core.AELog;
+import appeng.core.AppEng;
 
 public class VersionChecker implements Runnable
 {
+	private static final int FOUR_HOURS = 1000 * 3600 * 4;
 
-	public static VersionChecker instance = null;
-
-	private long delay = 0;
-	private boolean VersionChecker = true;
+	private final long delay;
 
 	public VersionChecker()
 	{
-		long now = (new Date()).getTime();
-		delay = (1000 * 3600 * 5) - (now - AEConfig.instance.latestTimeStamp);
-		if ( delay < 1 )
-			delay = 1;
+		final long now = new Date().getTime();
+		final long timeDiff = now - AEConfig.instance.latestTimeStamp;
+
+		this.delay = Math.max( 1, FOUR_HOURS - timeDiff);
 	}
 
 	@Override
@@ -57,7 +75,7 @@ public class VersionChecker implements Runnable
 						+ AEConfig.VERSION );
 
 				URLConnection yc = url.openConnection();
-				yc.setRequestProperty( "User-Agent", "AE2/" + AEConfig.VERSION + " (Channel:" + AEConfig.CHANNEL + "," + MCVersion.replace( " ", ":" ) + ")" );
+				yc.setRequestProperty( "User-Agent", "AE2/" + AEConfig.VERSION + " (Channel:" + AEConfig.CHANNEL + ',' + MCVersion.replace( " ", ":" ) + ')' );
 				BufferedReader in = new BufferedReader( new InputStreamReader( yc.getInputStream() ) );
 
 				StringBuilder Version = new StringBuilder();
@@ -85,7 +103,7 @@ public class VersionChecker implements Runnable
 							AEConfig.instance.latestTimeStamp = (new Date()).getTime();
 							AEConfig.instance.save();
 
-							if ( VersionChecker && !AEConfig.VERSION.equals( AEConfig.instance.latestVersion ) )
+							if ( !AEConfig.VERSION.equals( AEConfig.instance.latestVersion ) )
 							{
 								NBTTagCompound versionInf = new NBTTagCompound();
 								versionInf.setString( "modDisplayName", "Applied Energistics 2" );
@@ -102,7 +120,6 @@ public class VersionChecker implements Runnable
 
 								versionInf.setString( "newFileName", "appliedenergistics2-" + AEConfig.instance.latestVersion + ".jar" );
 								FMLInterModComms.sendRuntimeMessage( AppEng.instance, "VersionChecker", "addUpdate", versionInf );
-								VersionChecker = false;
 
 								AELog.info( "Stopping VersionChecker" );
 								return;
@@ -111,13 +128,13 @@ public class VersionChecker implements Runnable
 					}
 				}
 
-				sleep( 1000 * 3600 * 4 );
+				sleep( FOUR_HOURS );
 			}
 			catch (Exception e)
 			{
 				try
 				{
-					sleep( 1000 * 3600 * 4 );
+					sleep( FOUR_HOURS );
 				}
 				catch (InterruptedException e1)
 				{

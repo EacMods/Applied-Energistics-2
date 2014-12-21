@@ -1,15 +1,35 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.tile.grindstone;
 
-import io.netty.buffer.ByteBuf;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import appeng.api.implementations.tiles.ICrankable;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.AEBaseTile;
@@ -121,12 +141,11 @@ public class TileCrank extends AEBaseTile implements ICustomCollision
 		double xOff = -0.15 * getUp().offsetX;
 		double yOff = -0.15 * getUp().offsetY;
 		double zOff = -0.15 * getUp().offsetZ;
-		return Arrays
-				.asList( AxisAlignedBB.getBoundingBox( xOff + 0.15, yOff + 0.15, zOff + 0.15, xOff + 0.85, yOff + 0.85, zOff + 0.85 ) );
+		return Collections.singletonList( AxisAlignedBB.getBoundingBox( xOff + 0.15, yOff + 0.15, zOff + 0.15, xOff + 0.85, yOff + 0.85, zOff + 0.85 ) );
 	}
 
 	@Override
-	public void addCollidingBlockToList(World w, int x, int y, int z, AxisAlignedBB bb, List out, Entity e)
+	public void addCollidingBlockToList(World w, int x, int y, int z, AxisAlignedBB bb, List<AxisAlignedBB> out, Entity e)
 	{
 		double xOff = -0.15 * getUp().offsetX;
 		double yOff = -0.15 * getUp().offsetY;

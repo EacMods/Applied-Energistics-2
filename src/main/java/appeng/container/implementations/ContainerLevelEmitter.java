@@ -1,9 +1,32 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.container.implementations;
+
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.LevelType;
 import appeng.api.config.RedstoneMode;
@@ -15,8 +38,6 @@ import appeng.container.slot.SlotFakeTypeOnly;
 import appeng.container.slot.SlotRestrictedInput;
 import appeng.parts.automation.PartLevelEmitter;
 import appeng.util.Platform;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerLevelEmitter extends ContainerUpgradeable
 {
@@ -30,7 +51,7 @@ public class ContainerLevelEmitter extends ContainerUpgradeable
 	public void setTextField(GuiTextField level)
 	{
 		textField = level;
-		textField.setText( "" + EmitterValue );
+		textField.setText( String.valueOf( EmitterValue ) );
 	}
 
 	public ContainerLevelEmitter(InventoryPlayer ip, PartLevelEmitter te) {
@@ -65,7 +86,7 @@ public class ContainerLevelEmitter extends ContainerUpgradeable
 
 		IInventory upgrades = upgradeable.getInventoryByName( "upgrades" );
 		if ( availableUpgrades() > 0 )
-			addSlotToContainer( (new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, upgrades, 0, 187, 8 + 0, invPlayer )).setNotDraggable() );
+			addSlotToContainer( (new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, upgrades, 0, 187, 8, invPlayer )).setNotDraggable() );
 		if ( availableUpgrades() > 1 )
 			addSlotToContainer( (new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, upgrades, 1, 187, 8 + 18, invPlayer )).setNotDraggable() );
 		if ( availableUpgrades() > 2 )
@@ -109,7 +130,7 @@ public class ContainerLevelEmitter extends ContainerUpgradeable
 		if ( field.equals( "EmitterValue" ) )
 		{
 			if ( textField != null )
-				textField.setText( "" + EmitterValue );
+				textField.setText( String.valueOf( EmitterValue ) );
 		}
 	}
 

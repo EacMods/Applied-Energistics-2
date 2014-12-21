@@ -1,15 +1,36 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.server.subcommands;
+
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import appeng.core.AEConfig;
 import appeng.core.AELog;
 import appeng.core.features.AEFeature;
 import appeng.server.ISubCommand;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ChunkLogger implements ISubCommand
 {
@@ -34,7 +55,7 @@ public class ChunkLogger implements ISubCommand
 			for (StackTraceElement e : Thread.currentThread().getStackTrace())
 			{
 				if ( output )
-					AELog.info( "		" + e.getClassName() + "." + e.getMethodName() + " (" + e.getLineNumber() + ")" );
+					AELog.info( "		" + e.getClassName() + '.' + e.getMethodName() + " (" + e.getLineNumber() + ')' );
 				else
 				{
 					output = e.getClassName().contains( "EventBus" ) && e.getMethodName().contains( "post" );

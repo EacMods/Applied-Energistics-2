@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.util.inv;
+
 
 import java.util.Iterator;
 
@@ -8,21 +27,23 @@ import appeng.api.config.FuzzyMode;
 import appeng.util.InventoryAdaptor;
 import appeng.util.Platform;
 
+
 public class AdaptorIInventory extends InventoryAdaptor
 {
 
 	private final IInventory i;
 	private final boolean wrapperEnabled;
 
-	public AdaptorIInventory(IInventory s) {
+	public AdaptorIInventory( IInventory s )
+	{
 		i = s;
 		wrapperEnabled = s instanceof IInventoryWrapper;
 	}
 
-	boolean canRemoveStackFromSlot(int x, ItemStack is)
+	boolean canRemoveStackFromSlot( int x, ItemStack is )
 	{
 		if ( wrapperEnabled )
-			return ((IInventoryWrapper) i).canRemoveItemFromSlot( x, is );
+			return ( ( IInventoryWrapper ) i ).canRemoveItemFromSlot( x, is );
 		return true;
 	}
 
@@ -30,7 +51,7 @@ public class AdaptorIInventory extends InventoryAdaptor
 	public boolean containsItems()
 	{
 		int s = i.getSizeInventory();
-		for (int x = 0; x < s; x++)
+		for ( int x = 0; x < s; x++ )
 		{
 			if ( i.getStackInSlot( x ) != null )
 				return true;
@@ -39,13 +60,13 @@ public class AdaptorIInventory extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack removeSimilarItems(int amount, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination destination)
+	public ItemStack removeSimilarItems( int amount, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination destination )
 	{
 		int s = i.getSizeInventory();
-		for (int x = 0; x < s; x++)
+		for ( int x = 0; x < s; x++ )
 		{
 			ItemStack is = i.getStackInSlot( x );
-			if ( is != null && canRemoveStackFromSlot( x, is ) && (filter == null || Platform.isSameItemFuzzy( is, filter, fuzzyMode )) )
+			if ( is != null && canRemoveStackFromSlot( x, is ) && ( filter == null || Platform.isSameItemFuzzy( is, filter, fuzzyMode ) ) )
 			{
 				int newAmount = amount;
 				if ( newAmount > is.stackSize )
@@ -84,14 +105,14 @@ public class AdaptorIInventory extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack simulateSimilarRemove(int amount, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination destination)
+	public ItemStack simulateSimilarRemove( int amount, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination destination )
 	{
 		int s = i.getSizeInventory();
-		for (int x = 0; x < s; x++)
+		for ( int x = 0; x < s; x++ )
 		{
 			ItemStack is = i.getStackInSlot( x );
 
-			if ( is != null && canRemoveStackFromSlot( x, is ) && (filter == null || Platform.isSameItemFuzzy( is, filter, fuzzyMode )) )
+			if ( is != null && canRemoveStackFromSlot( x, is ) && ( filter == null || Platform.isSameItemFuzzy( is, filter, fuzzyMode ) ) )
 			{
 				int boundAmount = amount;
 				if ( boundAmount > is.stackSize )
@@ -111,15 +132,15 @@ public class AdaptorIInventory extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack removeItems(int amount, ItemStack filter, IInventoryDestination destination)
+	public ItemStack removeItems( int amount, ItemStack filter, IInventoryDestination destination )
 	{
 		int s = i.getSizeInventory();
 		ItemStack rv = null;
 
-		for (int x = 0; x < s && amount > 0; x++)
+		for ( int x = 0; x < s && amount > 0; x++ )
 		{
 			ItemStack is = i.getStackInSlot( x );
-			if ( is != null && canRemoveStackFromSlot( x, is ) && (filter == null || Platform.isSameItemPrecise( is, filter )) )
+			if ( is != null && canRemoveStackFromSlot( x, is ) && ( filter == null || Platform.isSameItemPrecise( is, filter ) ) )
 			{
 				int boundAmounts = amount;
 				if ( boundAmounts > is.stackSize )
@@ -165,15 +186,15 @@ public class AdaptorIInventory extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack simulateRemove(int amount, ItemStack filter, IInventoryDestination destination)
+	public ItemStack simulateRemove( int amount, ItemStack filter, IInventoryDestination destination )
 	{
 		int s = i.getSizeInventory();
 		ItemStack rv = null;
 
-		for (int x = 0; x < s && amount > 0; x++)
+		for ( int x = 0; x < s && amount > 0; x++ )
 		{
 			ItemStack is = i.getStackInSlot( x );
-			if ( is != null && canRemoveStackFromSlot( x, is ) && (filter == null || Platform.isSameItemPrecise( is, filter )) )
+			if ( is != null && canRemoveStackFromSlot( x, is ) && ( filter == null || Platform.isSameItemPrecise( is, filter ) ) )
 			{
 				int boundAmount = amount;
 				if ( boundAmount > is.stackSize )
@@ -202,122 +223,79 @@ public class AdaptorIInventory extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack addItems(ItemStack A)
+	public ItemStack addItems( ItemStack itemsToAdd )
 	{
-		if ( A == null )
-			return null;
-		if ( A.stackSize == 0 )
-			return null;
-
-		ItemStack left = A.copy();
-
-		int stack_limit = A.getMaxStackSize();
-		if ( stack_limit > i.getInventoryStackLimit() )
-			stack_limit = i.getInventoryStackLimit();
-
-		int s = i.getSizeInventory();
-		for (int pass = 0; pass < 2; pass++)
-		{
-			for (int x = 0; x < s; x++)
-			{
-				if ( i.isItemValidForSlot( x, A ) )
-				{
-					ItemStack is = i.getStackInSlot( x );
-					if ( is == null && pass != 0 )
-					{
-						ItemStack thisSlot = left.copy();
-						if ( thisSlot.stackSize > stack_limit )
-							thisSlot.stackSize = stack_limit;
-						left.stackSize -= thisSlot.stackSize;
-
-						i.setInventorySlotContents( x, thisSlot );
-
-						if ( left.stackSize <= 0 )
-						{
-							// i.markDirty();
-							return null;
-						}
-					}
-					else if ( is != null )
-					{
-						if ( Platform.isSameItemPrecise( is, left ) )
-						{
-							if ( is.stackSize < stack_limit )
-							{
-								int room = stack_limit - is.stackSize;
-								int used = left.stackSize;
-								if ( used > room )
-									used = room;
-
-								is.stackSize += used;
-								i.setInventorySlotContents( x, is );
-								i.markDirty();
-
-								left.stackSize -= used;
-								if ( left.stackSize <= 0 )
-								{
-									// i.markDirty();
-									return null;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// if ( left.stackSize != A.stackSize )
-		// i.markDirty();
-
-		return left;
+		return addItems( itemsToAdd, true );
 	}
 
 	@Override
-	public ItemStack simulateAdd(ItemStack A)
+	public ItemStack simulateAdd( ItemStack itemsToAdd )
 	{
-		if ( A == null )
-			return A;
-		ItemStack left = A.copy();
+		return addItems( itemsToAdd, false );
+	}
 
-		int stack_limit = A.getMaxStackSize();
-		if ( stack_limit > i.getInventoryStackLimit() )
-			stack_limit = i.getInventoryStackLimit();
-
-		int s = i.getSizeInventory();
-		for (int x = 0; x < s; x++)
+	/**
+	 * Adds an {@link ItemStack} to the adapted {@link IInventory}.
+	 * 
+	 * It respects the inventories stack limit, which can result in not all items added and some left ones are returned.
+	 * The ItemStack next is required for inventories, which will fail on isItemValidForSlot() for stacksizes larger
+	 * than the limit.
+	 * 
+	 * @param itemsToAdd itemStack to add to the inventory
+	 * @param modulate true to modulate, false for simulate
+	 * @return
+	 */
+	private ItemStack addItems( ItemStack itemsToAdd, boolean modulate )
+	{
+		if ( itemsToAdd == null || itemsToAdd.stackSize == 0 )
 		{
-			if ( i.isItemValidForSlot( x, A ) )
+			return null;
+		}
+
+		ItemStack left = itemsToAdd.copy();
+		int stackLimit = itemsToAdd.getMaxStackSize();
+		int perOperationLimit = Math.min( i.getInventoryStackLimit(), stackLimit );
+		int inventorySize = i.getSizeInventory();
+
+		for ( int slot = 0; slot < inventorySize; slot++ )
+		{
+			ItemStack next = left.copy();
+			next.stackSize = Math.min( perOperationLimit, next.stackSize );
+
+			if ( i.isItemValidForSlot( slot, next ) )
 			{
-				ItemStack is = i.getStackInSlot( x );
+				ItemStack is = i.getStackInSlot( slot );
 				if ( is == null )
 				{
-					ItemStack thisSlot = left.copy();
-					if ( thisSlot.stackSize > stack_limit )
-						thisSlot.stackSize = stack_limit;
-					left.stackSize -= thisSlot.stackSize;
+					left.stackSize -= next.stackSize;
+
+					if ( modulate )
+					{
+						i.setInventorySlotContents( slot, next );
+						i.markDirty();
+					}
 
 					if ( left.stackSize <= 0 )
 					{
 						return null;
 					}
 				}
-				else
+				else if ( Platform.isSameItemPrecise( is, left ) && is.stackSize < perOperationLimit )
 				{
-					if ( Platform.isSameItemPrecise( is, left ) )
-					{
-						if ( is.stackSize < stack_limit )
-						{
-							int room = stack_limit - is.stackSize;
-							int used = left.stackSize;
-							if ( used > room )
-								used = room;
+					int room = perOperationLimit - is.stackSize;
+					int used = Math.min( left.stackSize, room );
 
-							left.stackSize -= used;
-							if ( left.stackSize <= 0 )
-							{
-								return null;
-							}
-						}
+					if ( modulate )
+					{
+						is.stackSize += used;
+						i.setInventorySlotContents( slot, is );
+						i.markDirty();
+					}
+
+					left.stackSize -= used;
+					if ( left.stackSize <= 0 )
+					{
+						return null;
 					}
 				}
 			}

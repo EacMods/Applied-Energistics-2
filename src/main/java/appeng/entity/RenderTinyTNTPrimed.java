@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.entity;
 
 import net.minecraft.client.renderer.RenderBlocks;
@@ -24,7 +42,7 @@ public class RenderTinyTNTPrimed extends Render
 		this.renderManager = RenderManager.instance;
 	}
 
-	public void renderPrimedTNT(EntityTinyTNTPrimed tnt, double x, double y, double z, float var1, float life)
+	public void renderPrimedTNT( EntityTinyTNTPrimed tnt, double x, double y, double z, float life )
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef( (float) x, (float) y - 0.25f, (float) z );
@@ -73,9 +91,9 @@ public class RenderTinyTNTPrimed extends Render
 	}
 
 	@Override
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity tnt, double x, double y, double z, float unused, float life)
 	{
-		this.renderPrimedTNT( (EntityTinyTNTPrimed) par1Entity, par2, par4, par6, par8, par9 );
+		this.renderPrimedTNT( (EntityTinyTNTPrimed) tnt, x, y, z, life );
 	}
 
 	@Override

@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.recipes.handlers;
+
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -6,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RecipeError;
 import appeng.api.exceptions.RegistrationError;
@@ -99,17 +119,17 @@ public class Inscribe implements ICraftHandler, IWebsiteSerializer
 	@Override
 	public String getPattern(RecipeHandler h)
 	{
-		String o = "inscriber " + output.getQty() + "\n";
+		String o = "inscriber " + output.getQty() + '\n';
 
-		o += h.getName( output ) + "\n";
+		o += h.getName( output ) + '\n';
 
 		if ( plateA != null )
-			o +=  h.getName( plateA )+"\n";
+			o +=  h.getName( plateA )+ '\n';
 
 		o += h.getName(imprintable);
 
 		if ( plateB != null )
-			o += "\n"+h.getName( plateB );
+			o += '\n' +h.getName( plateB );
 
 		return o;
 	}

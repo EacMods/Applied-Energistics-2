@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.items.tools;
+
 
 import java.util.EnumSet;
 import java.util.List;
@@ -8,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
 import appeng.api.implementations.items.IMemoryCard;
 import appeng.api.implementations.items.MemoryCardMessages;
 import appeng.core.features.AEFeature;
@@ -47,13 +67,13 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	}
 
 	@Override
-	public void addInformation(ItemStack i, EntityPlayer p, List l, boolean b)
+	public void addCheckedInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean displayAdditionalInformation )
 	{
-		l.add( getLocalizedName( getSettingsName( i ) + ".name", getSettingsName( i ) ) );
+		lines.add( getLocalizedName( getSettingsName( stack ) + ".name", getSettingsName( stack ) ) );
 
-		NBTTagCompound data = getData( i );
+		NBTTagCompound data = getData( stack );
 		if ( data.hasKey( "tooltip" ) )
-			l.add( StatCollector.translateToLocal( getLocalizedName( data.getString( "tooltip" ) + ".name", data.getString( "tooltip" ) ) ) );
+			lines.add( StatCollector.translateToLocal( getLocalizedName( data.getString( "tooltip" ) + ".name", data.getString( "tooltip" ) ) ) );
 	}
 
 	@Override
@@ -75,7 +95,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	{
 		NBTTagCompound c = Platform.openNbtData( is );
 		String name = c.getString( "Config" );
-		return name == null || name.equals( "" ) ? GuiText.Blank.getUnlocalized() : name;
+		return name == null || name.isEmpty() ? GuiText.Blank.getUnlocalized() : name;
 	}
 
 	@Override

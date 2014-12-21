@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.spatial;
 
 import java.lang.reflect.Method;
@@ -94,17 +112,17 @@ public class StorageHelper
 	static class METeleporter extends Teleporter
 	{
 
-		final TelDestination dest;
+		final TelDestination destination;
 
 		public METeleporter(WorldServer par1WorldServer, TelDestination d) {
 			super( par1WorldServer );
-			dest = d;
+			destination = d;
 		}
 
 		@Override
 		public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8)
 		{
-			par1Entity.setLocationAndAngles( dest.x, dest.y, dest.z, par1Entity.rotationYaw, 0.0F );
+			par1Entity.setLocationAndAngles( destination.x, destination.y, destination.z, par1Entity.rotationYaw, 0.0F );
 			par1Entity.motionX = par1Entity.motionY = par1Entity.motionZ = 0.0D;
 		}
 
@@ -175,8 +193,8 @@ public class StorageHelper
 		// load the chunk!
 		WorldServer.class.cast( newWorld ).getChunkProvider().loadChunk( MathHelper.floor_double( link.x ) >> 4, MathHelper.floor_double( link.z ) >> 4 );
 
-		boolean difDest = newWorld != oldWorld;
-		if ( difDest )
+		boolean diffDestination = newWorld != oldWorld;
+		if ( diffDestination )
 		{
 			if ( player != null )
 			{
@@ -310,7 +328,7 @@ public class StorageHelper
 		transverseEdges( i, j, k, i + scaleX, j + scaleY, k + scaleZ, new TriggerUpdates( dst ) );
 
 		/*
-		 * IChunkProvider cp = dest.getChunkProvider(); if ( cp instanceof ChunkProviderServer ) { ChunkProviderServer
+		 * IChunkProvider cp = destination.getChunkProvider(); if ( cp instanceof ChunkProviderServer ) { ChunkProviderServer
 		 * srv = (ChunkProviderServer) cp; srv.unloadAllChunks(); }
 		 * 
 		 * cp.unloadQueuedChunks();

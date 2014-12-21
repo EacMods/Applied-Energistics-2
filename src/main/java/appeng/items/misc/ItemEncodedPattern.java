@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.items.misc;
+
 
 import java.util.EnumSet;
 import java.util.List;
@@ -10,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+
 import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
@@ -69,13 +89,13 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 	}
 
 	@Override
-	public void addInformation(ItemStack is, EntityPlayer p, List l, boolean more)
+	public void addCheckedInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean displayAdditionalInformation )
 	{
-		ICraftingPatternDetails details = getPatternForItem( is, p.worldObj );
+		ICraftingPatternDetails details = getPatternForItem( stack, player.worldObj );
 
 		if ( details == null )
 		{
-			l.add( EnumChatFormatting.RED + GuiText.InvalidPattern.getLocal() );
+			lines.add( EnumChatFormatting.RED + GuiText.InvalidPattern.getLocal() );
 			return;
 		}
 
@@ -85,7 +105,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 		IAEItemStack[] out = details.getCondensedOutputs();
 
 		String label = (isCrafting ? GuiText.Crafts.getLocal() : GuiText.Creates.getLocal()) + ": ";
-		String and = " " + GuiText.And.getLocal() + " ";
+		String and = ' ' + GuiText.And.getLocal() + ' ';
 		String with = GuiText.With.getLocal() + ": ";
 
 		boolean first = true;
@@ -96,7 +116,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 				continue;
 			}
 
-			l.add( (first ? label : and) + anOut.getStackSize() + " " + Platform.getItemDisplayName( anOut ) );
+			lines.add( (first ? label : and) + anOut.getStackSize() + ' ' + Platform.getItemDisplayName( anOut ) );
 			first = false;
 		}
 
@@ -108,7 +128,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 				continue;
 			}
 
-			l.add( (first ? with : and) + anIn.getStackSize() + " " + Platform.getItemDisplayName( anIn ) );
+			lines.add( (first ? with : and) + anIn.getStackSize() + ' ' + Platform.getItemDisplayName( anIn ) );
 			first = false;
 		}
 	}

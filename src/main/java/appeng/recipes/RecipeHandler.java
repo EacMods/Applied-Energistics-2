@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.recipes;
+
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,8 +30,14 @@ import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import appeng.recipes.handlers.IWebsiteSerializer;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.LoaderState;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
+
+import com.google.common.collect.HashMultimap;
+
 import appeng.api.AEApi;
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RecipeError;
@@ -29,13 +54,8 @@ import appeng.core.features.AEFeature;
 import appeng.items.materials.ItemMultiMaterial;
 import appeng.items.misc.ItemCrystalSeed;
 import appeng.items.parts.ItemMultiPart;
+import appeng.recipes.handlers.IWebsiteSerializer;
 import appeng.recipes.handlers.OreRegistration;
-
-import com.google.common.collect.HashMultimap;
-
-import cpw.mods.fml.common.LoaderState;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 public class RecipeHandler implements IRecipeHandler
 {
@@ -110,7 +130,7 @@ public class RecipeHandler implements IRecipeHandler
 				}
 				catch (MissingIngredientError e)
 				{
-					if ( data.erroronmissing )
+					if ( data.errorOnMissing )
 					{
 						AELog.warning( "Unable to register a recipe:" + e.getMessage() );
 						if ( data.exceptions )
@@ -185,7 +205,7 @@ public class RecipeHandler implements IRecipeHandler
 						String rew = ws.getPattern( this );
 						if ( rew != null && rew.length() > 0 )
 						{
-							out.putNextEntry( new ZipEntry( realName + "_" + offset + ".txt" ) );
+							out.putNextEntry( new ZipEntry( realName + '_' + offset + ".txt" ) );
 							offset++;
 							out.write( rew.getBytes() );
 						}
@@ -227,15 +247,15 @@ public class RecipeHandler implements IRecipeHandler
 			// :P
 		}
 
-		return i.getNameSpace() + ":" + i.getItemName();
+		return i.getNameSpace() + ':' + i.getItemName();
 	}
 
 	public String getName(ItemStack is) throws RecipeError
 	{
 		UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor( is.getItem() );
-		String realName = id.modId + ":" + id.name;
+		String realName = id.modId + ':' + id.name;
 
-		if ( !id.modId.equals( AppEng.modid ) && !id.modId.equals( "minecraft" ) )
+		if ( !id.modId.equals( AppEng.MOD_ID ) && !id.modId.equals( "minecraft" ) )
 			throw new RecipeError( "Not applicable for website" );
 
 		if ( is.getItem() == AEApi.instance().items().itemCrystalSeed.item() )
@@ -303,12 +323,12 @@ public class RecipeHandler implements IRecipeHandler
 		else if ( is.getItem() instanceof ItemMultiMaterial )
 		{
 			realName = realName.replace( "ItemMultiMaterial", "ItemMaterial" );
-			realName += "." + ((ItemMultiMaterial) is.getItem()).getTypeByStack( is ).name();
+			realName += '.' + ((ItemMultiMaterial) is.getItem()).getTypeByStack( is ).name();
 		}
 		else if ( is.getItem() instanceof ItemMultiPart )
 		{
 			realName = realName.replace( "ItemMultiPart", "ItemPart" );
-			realName += "." + ((ItemMultiPart) is.getItem()).getTypeByStack( is ).name();
+			realName += '.' + ((ItemMultiPart) is.getItem()).getTypeByStack( is ).name();
 		}
 		else if ( is.getItemDamage() > 0 )
 			realName += "." + is.getItemDamage();
@@ -532,7 +552,7 @@ public class RecipeHandler implements IRecipeHandler
 				{
 					if ( tokens.size() == 1 && (tokens.get( 0 ).equals( "true" ) || tokens.get( 0 ).equals( "false" )) )
 					{
-						data.erroronmissing = tokens.get( 0 ).equals( "true" );
+						data.errorOnMissing = tokens.get( 0 ).equals( "true" );
 					}
 					else
 						throw new RecipeError( "erroronmissing must be true or false explicitly." );

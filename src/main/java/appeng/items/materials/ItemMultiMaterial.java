@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.items.materials;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +46,9 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.google.common.collect.ImmutableSet;
+
 import appeng.api.config.Upgrades;
 import appeng.api.implementations.IUpgradeableHost;
 import appeng.api.implementations.items.IItemGroup;
@@ -43,8 +65,6 @@ import appeng.core.features.MaterialStackSrc;
 import appeng.items.AEBaseItem;
 import appeng.util.InventoryAdaptor;
 import appeng.util.Platform;
-
-import com.google.common.collect.ImmutableSet;
 
 public class ItemMultiMaterial extends AEBaseItem implements IStorageComponent, IUpgradeModule
 {
@@ -92,21 +112,21 @@ public class ItemMultiMaterial extends AEBaseItem implements IStorageComponent, 
 	}
 
 	@Override
-	public void addInformation(ItemStack is, EntityPlayer player, List details, boolean displayAdditionalInformation)
+	public void addCheckedInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean displayAdditionalInformation )
 	{
-		super.addInformation( is, player, details, displayAdditionalInformation );
+		super.addCheckedInformation( stack, player, lines, displayAdditionalInformation );
 
-		MaterialType mt = getTypeByStack( is );
+		MaterialType mt = getTypeByStack( stack );
 		if ( mt == null )
 			return;
 
 		if ( mt == MaterialType.NamePress )
 		{
-			NBTTagCompound c = Platform.openNbtData( is );
-			details.add( c.getString( "InscribeName" ) );
+			NBTTagCompound c = Platform.openNbtData( stack );
+			lines.add( c.getString( "InscribeName" ) );
 		}
 
-		Upgrades u = getType( is );
+		Upgrades u = getType( stack );
 		if ( u != null )
 		{
 			List<String> textList = new LinkedList<String>();
@@ -121,11 +141,11 @@ public class ItemMultiMaterial extends AEBaseItem implements IStorageComponent, 
 					IItemGroup ig = (IItemGroup) j.getKey().getItem();
 					String str = ig.getUnlocalizedGroupName( u.getSupported().keySet(), j.getKey() );
 					if ( str != null )
-						name = Platform.gui_localize( str ) + (limit > 1 ? " (" + limit + ")" : "");
+						name = Platform.gui_localize( str ) + (limit > 1 ? " (" + limit + ')' : "");
 				}
 
 				if ( name == null )
-					name = j.getKey().getDisplayName() + (limit > 1 ? " (" + limit + ")" : "");
+					name = j.getKey().getDisplayName() + (limit > 1 ? " (" + limit + ')' : "");
 
 				if ( !textList.contains( name ) )
 					textList.add( name );
@@ -134,7 +154,7 @@ public class ItemMultiMaterial extends AEBaseItem implements IStorageComponent, 
 			Pattern p = Pattern.compile( "(\\d+)[^\\d]" );
 			SlightlyBetterSort s = new SlightlyBetterSort( p );
 			Collections.sort( textList, s );
-			details.addAll( textList );
+			lines.addAll( textList );
 		}
 	}
 

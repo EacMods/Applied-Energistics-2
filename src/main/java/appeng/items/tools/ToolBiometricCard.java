@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.items.tools;
 
 import java.util.EnumSet;
@@ -78,11 +96,11 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	}
 
 	@Override
-	public void addInformation(ItemStack is, EntityPlayer p, List l, boolean b)
+	public void addCheckedInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean displayAdditionalInformation )
 	{
-		EnumSet<SecurityPermissions> perms = getPermissions( is );
+		EnumSet<SecurityPermissions> perms = getPermissions( stack );
 		if ( perms.isEmpty() )
-			l.add( GuiText.NoPermissions.getLocal() );
+			lines.add( GuiText.NoPermissions.getLocal() );
 		else
 		{
 			String msg = null;
@@ -94,7 +112,7 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 				else
 					msg = msg + ", " + Platform.gui_localize( sp.getUnlocalizedName() );
 			}
-			l.add( msg );
+			lines.add( msg );
 		}
 
 	}

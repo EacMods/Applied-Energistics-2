@@ -1,9 +1,29 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.me;
+
 
 import java.util.Arrays;
 import java.util.EnumSet;
 
 import net.minecraftforge.common.util.ForgeDirection;
+
 import appeng.api.exceptions.FailedConnection;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridConnection;
@@ -57,18 +77,18 @@ public class GridConnection implements IGridConnection, IPathItem
 		this.fromAtoB = fromAtoB;
 		sideB = b;
 
-		if ( b.myGrid == null )
+		if ( b.getMyGrid() == null )
 		{
 			b.setGrid( a.getInternalGrid() );
 		}
 		else
 		{
-			if ( a.myGrid == null )
+			if ( a.getMyGrid() == null )
 			{
 				GridPropagator gp = new GridPropagator( b.getInternalGrid() );
 				a.beginVisit( gp );
 			}
-			else if ( b.myGrid == null )
+			else if ( b.getMyGrid() == null )
 			{
 				GridPropagator gp = new GridPropagator( a.getInternalGrid() );
 				b.beginVisit( gp );
@@ -95,7 +115,7 @@ public class GridConnection implements IGridConnection, IPathItem
 
 	private boolean isNetworkABetter(GridNode a, GridNode b)
 	{
-		return a.myGrid.isImportant > b.myGrid.isImportant || a.myGrid.size() > b.myGrid.size();
+		return a.getMyGrid().getPriority() > b.getMyGrid().getPriority() || a.getMyGrid().size() > b.getMyGrid().size();
 	}
 
 	@Override

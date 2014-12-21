@@ -1,8 +1,26 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.integration.modules;
+
 
 import java.lang.reflect.Field;
 
-import appeng.integration.modules.BCHelpers.AERotatableBlockSchematic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -10,6 +28,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.common.event.FMLInterModComms;
+
+import buildcraft.BuildCraftEnergy;
+import buildcraft.BuildCraftTransport;
+import buildcraft.api.blueprints.SchematicRegistry;
+import buildcraft.api.tools.IToolWrench;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile;
+import buildcraft.api.transport.IPipeTile.PipeType;
+import buildcraft.transport.ItemFacade;
+import buildcraft.transport.PipeIconProvider;
+import buildcraft.transport.TileGenericPipe;
+
 import appeng.api.AEApi;
 import appeng.api.config.TunnelType;
 import appeng.api.definitions.Blocks;
@@ -23,18 +55,8 @@ import appeng.integration.BaseModule;
 import appeng.integration.abstraction.IBC;
 import appeng.integration.modules.BCHelpers.AECableSchematicTile;
 import appeng.integration.modules.BCHelpers.AEGenericSchematicTile;
+import appeng.integration.modules.BCHelpers.AERotatableBlockSchematic;
 import appeng.integration.modules.BCHelpers.BCPipeHandler;
-import buildcraft.BuildCraftEnergy;
-import buildcraft.BuildCraftTransport;
-import buildcraft.api.blueprints.SchematicRegistry;
-import buildcraft.api.tools.IToolWrench;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile;
-import buildcraft.api.transport.IPipeTile.PipeType;
-import buildcraft.transport.ItemFacade;
-import buildcraft.transport.PipeIconProvider;
-import buildcraft.transport.TileGenericPipe;
-import cpw.mods.fml.common.event.FMLInterModComms;
 
 public class BC extends BaseModule implements IBC
 {
@@ -235,7 +257,7 @@ public class BC extends BaseModule implements IBC
 
 	private void initBuilderSupport()
 	{
-		SchematicRegistry.declareBlueprintSupport( AppEng.modid );
+		SchematicRegistry.declareBlueprintSupport( AppEng.MOD_ID );
 
 		Blocks blocks = AEApi.instance().blocks();
 		Block cable = blocks.blockMultiPart.block();

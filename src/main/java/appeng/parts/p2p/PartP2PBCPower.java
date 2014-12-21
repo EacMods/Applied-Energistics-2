@@ -1,6 +1,24 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.parts.p2p;
 
-import appeng.integration.abstraction.helpers.BaseMJPerdition;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +26,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import buildcraft.api.mj.IBatteryObject;
+import buildcraft.api.mj.ISidedBatteryProvider;
+import buildcraft.api.mj.MjAPI;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
+
 import appeng.api.config.PowerUnits;
 import appeng.api.config.TunnelType;
 import appeng.api.networking.IGridNode;
@@ -19,20 +49,12 @@ import appeng.core.settings.TickRates;
 import appeng.integration.IntegrationType;
 import appeng.integration.abstraction.IMJ5;
 import appeng.integration.abstraction.IMJ6;
+import appeng.integration.abstraction.helpers.BaseMJPerdition;
 import appeng.me.GridAccessException;
 import appeng.me.cache.helpers.TunnelCollection;
 import appeng.transformer.annotations.integration.Interface;
 import appeng.transformer.annotations.integration.InterfaceList;
 import appeng.transformer.annotations.integration.Method;
-import buildcraft.api.mj.IBatteryObject;
-import buildcraft.api.mj.ISidedBatteryProvider;
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @InterfaceList(value = { @Interface(iface = "buildcraft.api.mj.ISidedBatteryProvider", iname = "MJ6"),
 		@Interface(iface = "buildcraft.api.mj.IBatteryObject", iname = "MJ6"), @Interface(iface = "buildcraft.api.power.IPowerReceptor", iname = "MJ5"),
@@ -205,9 +227,7 @@ public class PartP2PBCPower extends PartP2PTunnel<PartP2PBCPower> implements IPo
 	@Method(iname = "MJ5")
 	public PowerReceiver getPowerReceiver(ForgeDirection side)
 	{
-		if ( side.equals( side ) )
-			return pp.getPowerReceiver();
-		return null;
+		return pp.getPowerReceiver();
 	}
 
 	@Override

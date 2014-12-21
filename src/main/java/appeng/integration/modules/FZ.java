@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.integration.modules;
 
 import java.lang.reflect.Field;
@@ -22,7 +40,7 @@ public class FZ implements IFZ, IIntegrationModule
 
 	public static FZ instance;
 
-	private static Class day_BarrelClass;
+	private static Class<?> day_BarrelClass;
 	private static Method day_getItemCount;
 	private static Method day_setItemCount;
 	private static Method day_getMaxSize;
@@ -138,9 +156,7 @@ public class FZ implements IFZ, IIntegrationModule
 	@Override
 	public boolean isBarrel(TileEntity te)
 	{
-		if ( day_BarrelClass.isAssignableFrom( te.getClass() ) )
-			return true;
-		return false;
+		return day_BarrelClass.isAssignableFrom( te.getClass() );
 	}
 
 	@Override
@@ -148,9 +164,9 @@ public class FZ implements IFZ, IIntegrationModule
 	{
 		day_BarrelClass = Class.forName( "factorization.weird.TileEntityDayBarrel" );
 
-		day_getItemCount = day_BarrelClass.getDeclaredMethod( "getItemCount", new Class[] {} );
-		day_setItemCount = day_BarrelClass.getDeclaredMethod( "setItemCount", new Class[] { int.class } );
-		day_getMaxSize = day_BarrelClass.getDeclaredMethod( "getMaxSize", new Class[] {} );
+		day_getItemCount = day_BarrelClass.getDeclaredMethod( "getItemCount" );
+		day_setItemCount = day_BarrelClass.getDeclaredMethod( "setItemCount", int.class );
+		day_getMaxSize = day_BarrelClass.getDeclaredMethod( "getMaxSize" );
 		day_item = day_BarrelClass.getDeclaredField( "item" );
 	}
 
@@ -165,7 +181,7 @@ public class FZ implements IFZ, IIntegrationModule
 	{
 		try
 		{
-			Class c = Class.forName( "factorization.oreprocessing.TileEntityGrinder" );
+			Class<?> c = Class.forName( "factorization.oreprocessing.TileEntityGrinder" );
 			Method m = c.getMethod( "addRecipe", Object.class, ItemStack.class, float.class );
 
 			float amt = out.stackSize;

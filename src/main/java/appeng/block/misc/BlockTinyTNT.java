@@ -1,6 +1,25 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.block.misc;
 
-import java.util.Arrays;
+
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -19,6 +38,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.registry.EntityRegistry;
+
 import appeng.block.AEBaseBlock;
 import appeng.client.render.BaseBlockRender;
 import appeng.client.render.blocks.RenderTinyTNT;
@@ -29,7 +51,6 @@ import appeng.entity.EntityIds;
 import appeng.entity.EntityTinyTNTPrimed;
 import appeng.helpers.ICustomCollision;
 import appeng.hooks.DispenserBehaviorTinyTNT;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class BlockTinyTNT extends AEBaseBlock implements ICustomCollision
 {
@@ -37,9 +58,11 @@ public class BlockTinyTNT extends AEBaseBlock implements ICustomCollision
 	public BlockTinyTNT() {
 		super( BlockTinyTNT.class, Material.tnt );
 		setFeature( EnumSet.of( AEFeature.TinyTNT ) );
-		setLightOpacity( 3 );
+		setLightOpacity( 1 );
 		setBlockBounds( 0.25f, 0.0f, 0.25f, 0.75f, 0.5f, 0.75f );
 		isFullSize = isOpaque = false;
+		setStepSound( soundTypeGrass );
+		setHardness( 0F );
 
 		EntityRegistry.registerModEntity( EntityTinyTNTPrimed.class, "EntityTinyTNTPrimed", EntityIds.TINY_TNT, AppEng.instance, 16, 4, true );
 	}
@@ -152,14 +175,13 @@ public class BlockTinyTNT extends AEBaseBlock implements ICustomCollision
 	@Override
 	public Iterable<AxisAlignedBB> getSelectedBoundingBoxesFromPool(World w, int x, int y, int z, Entity e, boolean isVisual)
 	{
-		return Arrays.asList( AxisAlignedBB.getBoundingBox( 0.25, 0, 0.25, 0.75, 0.5, 0.75 ) );
+		return Collections.singletonList( AxisAlignedBB.getBoundingBox( 0.25, 0, 0.25, 0.75, 0.5, 0.75 ) );
 	}
 
 	@Override
-	public void addCollidingBlockToList(World w, int x, int y, int z, AxisAlignedBB bb, List out, Entity e)
+	public void addCollidingBlockToList(World w, int x, int y, int z, AxisAlignedBB bb, List<AxisAlignedBB> out, Entity e)
 	{
 		out.add( AxisAlignedBB.getBoundingBox( 0.25, 0, 0.25, 0.75, 0.5, 0.75 ) );
-
 	}
 
 }

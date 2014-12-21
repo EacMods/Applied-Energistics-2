@@ -1,6 +1,29 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.me.cluster.implementations;
 
-import java.util.*;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.inventory.InventoryCrafting;
@@ -9,6 +32,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
 import appeng.api.config.FuzzyMode;
@@ -49,11 +78,6 @@ import appeng.tile.crafting.TileCraftingMonitorTile;
 import appeng.tile.crafting.TileCraftingTile;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CraftingCPUCluster implements IAECluster, ICraftingCPU
 {
@@ -846,7 +870,7 @@ public class CraftingCPUCluster implements IAECluster, ICraftingCPU
 		int hash = System.identityHashCode( this );
 		int hmm = finalOutput == null ? 0 : finalOutput.hashCode();
 
-		return Long.toString( now, Character.MAX_RADIX ) + "-" + Integer.toString( hash, Character.MAX_RADIX ) + "-"
+		return Long.toString( now, Character.MAX_RADIX ) + '-' + Integer.toString( hash, Character.MAX_RADIX ) + '-'
 				+ Integer.toString( hmm, Character.MAX_RADIX );
 	}
 
@@ -1084,7 +1108,7 @@ public class CraftingCPUCluster implements IAECluster, ICraftingCPU
 			if ( te.hasCustomName() )
 			{
 				if ( myName.length() > 0 )
-					myName += " " + te.getCustomName();
+					myName += ' ' + te.getCustomName();
 				else
 					myName = te.getCustomName();
 			}

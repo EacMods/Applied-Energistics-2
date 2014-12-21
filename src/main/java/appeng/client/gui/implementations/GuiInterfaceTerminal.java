@@ -1,4 +1,23 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.client.gui.implementations;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,12 +28,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import org.lwjgl.opengl.GL11;
+import com.google.common.collect.HashMultimap;
 
 import appeng.api.AEApi;
 import appeng.client.gui.AEBaseGui;
@@ -27,15 +48,13 @@ import appeng.core.localization.GuiText;
 import appeng.parts.reporting.PartMonitor;
 import appeng.util.Platform;
 
-import com.google.common.collect.HashMultimap;
-
 public class GuiInterfaceTerminal extends AEBaseGui
 {
 
 	private static final int LINES_ON_PAGE = 6;
 
 	// TODO: copied from GuiMEMonitorable. It looks not changed, maybe unneeded?
-	int offsetX = 9;
+	final int offsetX = 9;
 
 	private final HashMap<Long, ClientDCInternalInv> byId = new HashMap<Long, ClientDCInternalInv>();
 	private final HashMultimap<String, ClientDCInternalInv> byName = HashMultimap.create();
@@ -164,7 +183,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 				String name = (String) lineObj;
 				int rows = byName.get( name ).size();
 				if ( rows > 1 )
-					name = name + " (" + rows + ")";
+					name = name + " (" + rows + ')';
 
 				while (name.length() > 2 && fontRendererObj.getStringWidth( name ) > 155)
 					name = name.substring( 0, name.length() - 1 );
@@ -242,7 +261,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 			boolean found = searchFilterLowerCase.isEmpty();
 
 			// Search if the current inventory holds a pattern containing the search term.
-			if ( !found && !searchFilterLowerCase.equals( "" ) )
+			if ( !found && !searchFilterLowerCase.isEmpty() )
 			{
 				for (ItemStack itemStack : entry.inv)
 				{

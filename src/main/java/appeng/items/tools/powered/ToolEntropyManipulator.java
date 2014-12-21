@@ -1,9 +1,30 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.items.tools.powered;
+
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Hashtable;
 import java.util.List;
+
+import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
@@ -21,6 +42,7 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
 import appeng.api.util.DimensionalCoord;
 import appeng.block.misc.BlockTinyTNT;
 import appeng.core.AEConfig;
@@ -31,116 +53,16 @@ import appeng.items.tools.powered.powersink.AEBasePoweredItem;
 import appeng.util.InWorldToolOperationResult;
 import appeng.util.Platform;
 
+
 public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockTool
 {
-
-	static class Combo
-	{
-
-		final public Block blk;
-		final public int meta;
-
-		public Combo(Block b, int m) {
-			blk = b;
-			meta = m;
-		}
-
-		@Override
-		public int hashCode()
-		{
-			return blk.hashCode() ^ meta;
-		}
-
-		@Override
-		public boolean equals(Object obj)
-		{
-			if ( obj == null )
-				return false;
-			if ( getClass() != obj.getClass() )
-				return false;
-			Combo other = (Combo) obj;
-			return blk == other.blk && meta == other.meta;
-		}
-
-	}
 
 	static private Hashtable<Combo, InWorldToolOperationResult> heatUp;
 	static private Hashtable<Combo, InWorldToolOperationResult> coolDown;
 
-	static public void heat(Block BlockID, int Metadata, World w, int x, int y, int z)
+	public ToolEntropyManipulator()
 	{
-		InWorldToolOperationResult r = heatUp.get( new Combo( BlockID, Metadata ) );
-
-		if ( r == null )
-		{
-			r = heatUp.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
-		}
-
-		if ( r.BlockItem != null )
-		{
-			w.setBlock( x, y, z, Block.getBlockFromItem( r.BlockItem.getItem() ), r.BlockItem.getItemDamage(), 3 );
-		}
-		else
-		{
-			w.setBlock( x, y, z, Platform.air, 0, 3 );
-		}
-
-		if ( r.Drops != null )
-		{
-			Platform.spawnDrops( w, x, y, z, r.Drops );
-		}
-	}
-
-	static public boolean canHeat(Block BlockID, int Metadata)
-	{
-		InWorldToolOperationResult r = heatUp.get( new Combo( BlockID, Metadata ) );
-
-		if ( r == null )
-		{
-			r = heatUp.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
-		}
-
-		return r != null;
-	}
-
-	static public void cool(Block BlockID, int Metadata, World w, int x, int y, int z)
-	{
-		InWorldToolOperationResult r = coolDown.get( new Combo( BlockID, Metadata ) );
-
-		if ( r == null )
-		{
-			r = coolDown.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
-		}
-
-		if ( r.BlockItem != null )
-		{
-			w.setBlock( x, y, z, Block.getBlockFromItem( r.BlockItem.getItem() ), r.BlockItem.getItemDamage(), 3 );
-		}
-		else
-		{
-			w.setBlock( x, y, z, Platform.air, 0, 3 );
-		}
-
-		if ( r.Drops != null )
-		{
-			Platform.spawnDrops( w, x, y, z, r.Drops );
-		}
-	}
-
-	static public boolean canCool(Block BlockID, int Metadata)
-	{
-		InWorldToolOperationResult r = coolDown.get( new Combo( BlockID, Metadata ) );
-
-		if ( r == null )
-		{
-			r = coolDown.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
-		}
-
-		return r != null;
-	}
-
-	public ToolEntropyManipulator() {
-		super( ToolEntropyManipulator.class, null );
+		super( ToolEntropyManipulator.class, Optional.<String> absent() );
 		setFeature( EnumSet.of( AEFeature.EntropyManipulator, AEFeature.PoweredTools ) );
 		maxStoredPower = AEConfig.instance.entropyManipulatorBattery;
 
@@ -170,8 +92,111 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 		BlockDispenser.dispenseBehaviorRegistry.putObject( this, new DispenserBlockTool() );
 	}
 
+	static public void heat( Block BlockID, int Metadata, World w, int x, int y, int z )
+	{
+		InWorldToolOperationResult r = heatUp.get( new Combo( BlockID, Metadata ) );
+
+		if ( r == null )
+		{
+			r = heatUp.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
+		}
+
+		if ( r.BlockItem != null )
+		{
+			w.setBlock( x, y, z, Block.getBlockFromItem( r.BlockItem.getItem() ), r.BlockItem.getItemDamage(), 3 );
+		}
+		else
+		{
+			w.setBlock( x, y, z, Platform.air, 0, 3 );
+		}
+
+		if ( r.Drops != null )
+		{
+			Platform.spawnDrops( w, x, y, z, r.Drops );
+		}
+	}
+
+	static class Combo
+	{
+
+		final public Block blk;
+		final public int meta;
+
+		public Combo( Block b, int m )
+		{
+			blk = b;
+			meta = m;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return blk.hashCode() ^ meta;
+		}
+
+		@Override
+		public boolean equals( Object obj )
+		{
+			if ( obj == null )
+				return false;
+			if ( getClass() != obj.getClass() )
+				return false;
+			Combo other = ( Combo ) obj;
+			return blk == other.blk && meta == other.meta;
+		}
+
+	}
+
+	static public boolean canHeat( Block BlockID, int Metadata )
+	{
+		InWorldToolOperationResult r = heatUp.get( new Combo( BlockID, Metadata ) );
+
+		if ( r == null )
+		{
+			r = heatUp.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
+		}
+
+		return r != null;
+	}
+
+	static public void cool( Block BlockID, int Metadata, World w, int x, int y, int z )
+	{
+		InWorldToolOperationResult r = coolDown.get( new Combo( BlockID, Metadata ) );
+
+		if ( r == null )
+		{
+			r = coolDown.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
+		}
+
+		if ( r.BlockItem != null )
+		{
+			w.setBlock( x, y, z, Block.getBlockFromItem( r.BlockItem.getItem() ), r.BlockItem.getItemDamage(), 3 );
+		}
+		else
+		{
+			w.setBlock( x, y, z, Platform.air, 0, 3 );
+		}
+
+		if ( r.Drops != null )
+		{
+			Platform.spawnDrops( w, x, y, z, r.Drops );
+		}
+	}
+
+	static public boolean canCool( Block BlockID, int Metadata )
+	{
+		InWorldToolOperationResult r = coolDown.get( new Combo( BlockID, Metadata ) );
+
+		if ( r == null )
+		{
+			r = coolDown.get( new Combo( BlockID, OreDictionary.WILDCARD_VALUE ) );
+		}
+
+		return r != null;
+	}
+
 	@Override
-	public boolean hitEntity(ItemStack item, EntityLivingBase target, EntityLivingBase hitter)
+	public boolean hitEntity( ItemStack item, EntityLivingBase target, EntityLivingBase hitter )
 	{
 		if ( this.getAECurrentPower( item ) > 1600 )
 		{
@@ -183,7 +208,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack item, World w, EntityPlayer p)
+	public ItemStack onItemRightClick( ItemStack item, World w, EntityPlayer p )
 	{
 		MovingObjectPosition target = this.getMovingObjectPositionFromPlayer( w, p, true );
 
@@ -211,7 +236,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack item, EntityPlayer p, World w, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	public boolean onItemUse( ItemStack item, EntityPlayer p, World w, int x, int y, int z, int side, float hitX, float hitY, float hitZ )
 	{
 		if ( this.getAECurrentPower( item ) > 1600 )
 		{
@@ -235,14 +260,14 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 				if ( Blk instanceof BlockTNT )
 				{
 					w.setBlock( x, y, z, Platform.air, 0, 3 );
-					((BlockTNT) Blk).func_150114_a( w, x, y, z, 1, p );
+					( ( BlockTNT ) Blk ).func_150114_a( w, x, y, z, 1, p );
 					return true;
 				}
 
 				if ( Blk instanceof BlockTinyTNT )
 				{
 					w.setBlock( x, y, z, Platform.air, 0, 3 );
-					((BlockTinyTNT) Blk).startFuse( w, x, y, z, p );
+					( ( BlockTinyTNT ) Blk ).startFuse( w, x, y, z, p );
 					return true;
 				}
 
@@ -258,7 +283,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 				boolean hasFurnaceable = false;
 				boolean canFurnaceable = true;
 
-				for (ItemStack i : stack)
+				for ( ItemStack i : stack )
 				{
 					ItemStack result = FurnaceRecipes.smelting().getSmeltingResult( i );
 

@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.util.inv;
 
 import java.util.Iterator;
@@ -19,7 +37,7 @@ public class AdaptorList extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack removeSimilarItems(int how_many, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination dest)
+	public ItemStack removeSimilarItems(int how_many, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination destination)
 	{
 		int s = i.size();
 		for (int x = 0; x < s; x++)
@@ -29,7 +47,7 @@ public class AdaptorList extends InventoryAdaptor
 			{
 				if ( how_many > is.stackSize )
 					how_many = is.stackSize;
-				if ( dest != null && !dest.canInsert( is ) )
+				if ( destination != null && !destination.canInsert( is ) )
 					how_many = 0;
 
 				if ( how_many > 0 )
@@ -50,7 +68,7 @@ public class AdaptorList extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack simulateSimilarRemove(int how_many, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination dest)
+	public ItemStack simulateSimilarRemove(int how_many, ItemStack filter, FuzzyMode fuzzyMode, IInventoryDestination destination)
 	{
 		for (ItemStack is : i)
 		{
@@ -60,7 +78,7 @@ public class AdaptorList extends InventoryAdaptor
 				{
 					how_many = is.stackSize;
 				}
-				if ( dest != null && !dest.canInsert( is ) )
+				if ( destination != null && !destination.canInsert( is ) )
 				{
 					how_many = 0;
 				}
@@ -78,7 +96,7 @@ public class AdaptorList extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack removeItems(int how_many, ItemStack filter, IInventoryDestination dest)
+	public ItemStack removeItems(int how_many, ItemStack filter, IInventoryDestination destination)
 	{
 		int s = i.size();
 		for (int x = 0; x < s; x++)
@@ -88,7 +106,7 @@ public class AdaptorList extends InventoryAdaptor
 			{
 				if ( how_many > is.stackSize )
 					how_many = is.stackSize;
-				if ( dest != null && !dest.canInsert( is ) )
+				if ( destination != null && !destination.canInsert( is ) )
 					how_many = 0;
 
 				if ( how_many > 0 )
@@ -109,7 +127,7 @@ public class AdaptorList extends InventoryAdaptor
 	}
 
 	@Override
-	public ItemStack simulateRemove(int how_many, ItemStack filter, IInventoryDestination dest)
+	public ItemStack simulateRemove(int how_many, ItemStack filter, IInventoryDestination destination)
 	{
 		for (ItemStack is : i)
 		{
@@ -119,7 +137,7 @@ public class AdaptorList extends InventoryAdaptor
 				{
 					how_many = is.stackSize;
 				}
-				if ( dest != null && !dest.canInsert( is ) )
+				if ( destination != null && !destination.canInsert( is ) )
 				{
 					how_many = 0;
 				}

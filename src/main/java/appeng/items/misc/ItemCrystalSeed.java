@@ -1,3 +1,21 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 package appeng.items.misc;
 
 import java.util.EnumSet;
@@ -123,12 +141,13 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer p, List l, boolean b)
+	public void addCheckedInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean displayAdditionalInformation )
 	{
-		l.add( ButtonToolTips.DoesntDespawn.getLocal() );
+		lines.add( ButtonToolTips.DoesntDespawn.getLocal() );
 		int progress = getProgress( stack ) % SINGLE_OFFSET;
-		l.add( Math.floor( (float) progress / (float) (SINGLE_OFFSET / 100) ) + "%" );
-		super.addInformation( stack, p, l, b );
+		lines.add( Math.floor( (float) progress / (float) (SINGLE_OFFSET / 100) ) + "%" );
+
+		super.addCheckedInformation( stack, player, lines, displayAdditionalInformation );
 	}
 
 	@Override
